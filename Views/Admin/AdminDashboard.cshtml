@@ -1,0 +1,170 @@
+﻿@model TailorrNow.Models.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-0">
+    
+    <!-- Hero Section -->
+    <section class="bg-gradient-primary text-white py-5 shadow-sm">
+        <div class="container py-4 text-center reveal active">
+            <h1 class="display-5 fw-bold mb-3">Welcome, @Model.AdminName!</h1>
+            <p class="lead mb-0 opacity-75">
+                Monitor and manage the entire TailorNow platform with ease. From managing users to tracking bookings
+                and analyzing commissions, everything you need is just a click away.
+            </p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3 reveal">
+                    <div class="feature-card text-center border-0 shadow-sm h-100">
+                        <div class="feature-icon bg-primary-light text-primary mx-auto mb-3">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3 class="fw-bold text-dark">@Model.TotalUsersCount</h3>
+                        <p class="text-muted mb-0">Total Users</p>
+                    </div>
+                </div>
+                <div class="col-md-3 reveal">
+                    <div class="feature-card text-center border-0 shadow-sm h-100">
+                        <div class="feature-icon bg-info-light text-info mx-auto mb-3">
+                            <i class="bi bi-scissors"></i>
+                        </div>
+                        <h3 class="fw-bold text-dark">@Model.ActiveTailorsCount</h3>
+                        <p class="text-muted mb-0">Active Tailors</p>
+                    </div>
+                </div>
+                <div class="col-md-3 reveal">
+                    <div class="feature-card text-center border-0 shadow-sm h-100">
+                        <div class="feature-icon bg-success-light text-success mx-auto mb-3">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h3 class="fw-bold text-dark">@Model.TotalBookingsCount</h3>
+                        <p class="text-muted mb-0">Total Bookings</p>
+                    </div>
+                </div>
+                <div class="col-md-3 reveal">
+                    <div class="feature-card text-center border-0 shadow-sm h-100">
+                        <div class="feature-icon bg-warning-light text-warning mx-auto mb-3">
+                            <i class="bi bi-currency-rupee"></i>
+                        </div>
+                        <h3 class="fw-bold text-dark">@Model.TotalCommission.ToString("C2")</h3>
+                        <p class="text-muted mb-0">Total Commission</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h4 class="fw-bold text-dark mb-4 text-center d-inline-block border-bottom border-primary border-3 pb-2">Quick Actions</h4>
+            <div class="row g-4 mt-2">
+                <div class="col-md-4 reveal">
+                    <div class="feature-card text-center py-5 border-0 shadow-sm h-100">
+                        <div class="icon-box bg-primary text-white mb-4 mx-auto">
+                            <i class="bi bi-people-fill fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">Manage Users</h5>
+                        <p class="text-muted mb-4">View, add, or remove Tailors and Customers</p>
+                        <a href="/Admin/ManageUsers" class="btn btn-primary rounded-pill px-4">Manage Users</a>
+                    </div>
+                </div>
+                <div class="col-md-4 reveal">
+                    <div class="feature-card text-center py-5 border-0 shadow-sm h-100">
+                        <div class="icon-box bg-secondary text-white mb-4 mx-auto">
+                            <i class="bi bi-calendar-check fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">All Bookings</h5>
+                        <p class="text-muted mb-4">View and manage all customer bookings</p>
+                        <a href="/Admin/ViewBookings" class="btn btn-secondary rounded-pill px-4">View Bookings</a>
+                    </div>
+                </div>
+                <div class="col-md-4 reveal">
+                    <div class="feature-card text-center py-5 border-0 shadow-sm h-100">
+                        <div class="icon-box bg-accent text-white mb-4 mx-auto">
+                            <i class="bi bi-graph-up fs-2"></i>
+                        </div>
+                        <h5 class="fw-bold">Commission Reports</h5>
+                        <p class="text-muted mb-4">Track earnings and generate reports</p>
+                        <a href="/Admin/CommissionReports" class="btn btn-warning rounded-pill px-4">View Reports</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="py-5 mb-5">
+        <div class="container">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden reveal">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="fw-bold text-primary mb-0"><i class="bi bi-activity me-2"></i>Recent Activity</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @if (Model.RecentActivities != null && Model.RecentActivities.Any())
+                        {
+                            foreach (var activity in Model.RecentActivities)
+                            {
+                                <div class="list-group-item py-4 border-0 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle bg-@activity.Color-light text-@activity.Color me-3">
+                                                <i class="bi @activity.Icon"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-bold">@activity.Title</h6>
+                                                <small class="text-muted">@activity.TimeAgo</small>
+                                            </div>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(activity.BadgeText))
+                                        {
+                                            <span class="badge @activity.BadgeClass rounded-pill px-3">@activity.BadgeText</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="list-group-item py-4 text-center text-muted">
+                                No recent activity found.
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 text-center py-3">
+                    <a href="/Admin/ViewBookings" class="text-primary text-decoration-none fw-bold small">View All Bookings <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        // Scroll reveal animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Initial check
+        document.addEventListener("DOMContentLoaded", reveal);
+    </script>
+}

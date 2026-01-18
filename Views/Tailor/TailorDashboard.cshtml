@@ -1,0 +1,187 @@
+﻿@model TailorrNow.Models.ViewModels.TailorDashboardViewModel
+
+@{
+    ViewBag.Title = "Tailor Dashboard - TailorNow";
+    Layout = "~/Views/Shared/_LayoutTailor.cshtml";
+}
+
+<!-- Hero Section -->
+<section class="hero-section section-padding bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Welcome, @Model.TailorName!</h1>
+                <p class="lead mb-4">
+                    Streamline your tailoring business with TailorNow! Easily manage your services,
+                    update your availability, and stay on top of all customer bookings.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="/Tailor/ViewBookings" class="btn btn-light btn-lg px-4">
+                        <i class="bi bi-calendar-check me-2"></i>View Bookings
+                    </a>
+                    <a href="/Tailor/ManageServices" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-scissors me-2"></i>Manage Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Cards -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4 reveal">
+                <div class="feature-card text-center">
+                    <div class="icon-box bg-primary text-white mb-3 mx-auto">
+                        <i class="bi bi-calendar-check fs-3"></i>
+                    </div>
+                    <h3 class="h2 mb-2 text-dark">@Model.TotalBookingsCount</h3>
+                    <p class="text-muted mb-3">Total Appointments</p>
+                    <a href="/Tailor/ViewBookings" class="btn btn-primary btn-sm">View All</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal">
+                <div class="feature-card text-center">
+                    <div class="icon-box bg-warning text-white mb-3 mx-auto">
+                        <i class="bi bi-clock fs-3"></i>
+                    </div>
+                    <h3 class="h2 mb-2 text-dark">@Model.PendingRequestsCount</h3>
+                    <p class="text-muted mb-3">Pending Requests</p>
+                    <a href="/Tailor/ViewBookings?status=pending" class="btn btn-warning btn-sm">Review</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal">
+                <div class="feature-card text-center">
+                    <div class="icon-box bg-success text-white mb-3 mx-auto">
+                        <i class="bi bi-currency-rupee fs-3"></i>
+                    </div>
+                    <h3 class="h2 mb-2 text-dark">@Model.TotalEarning.ToString("C2")</h3>
+                    <p class="text-muted mb-3">Total Earnings</p>
+                    <a href="/Tailor/ViewBookings?status=completed" class="btn btn-success btn-sm">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions -->
+<section class="section-padding">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2 class="fw-bold text-dark">Manage Your Business</h2>
+            <p class="text-muted">Quick access to essential tools</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 reveal">
+                <div class="feature-card text-center h-100">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary mb-3 mx-auto">
+                        <i class="bi bi-scissors fs-3"></i>
+                    </div>
+                    <h3 class="h5 mb-2 text-dark">Manage Services</h3>
+                    <p class="text-muted mb-3">Define and update your tailoring services and prices</p>
+                    <a href="/Tailor/ManageServices" class="btn btn-primary btn-sm">Go to Services</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal">
+                <div class="feature-card text-center h-100">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary mb-3 mx-auto">
+                        <i class="bi bi-calendar-week fs-3"></i>
+                    </div>
+                    <h3 class="h5 mb-2 text-dark">View Bookings</h3>
+                    <p class="text-muted mb-3">See all current and past customer appointments</p>
+                    <a href="/Tailor/ViewBookings" class="btn btn-primary btn-sm">View Bookings</a>
+                </div>
+            </div>
+            <div class="col-md-4 reveal">
+                <div class="feature-card text-center h-100">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary mb-3 mx-auto">
+                        <i class="bi bi-clock-history fs-3"></i>
+                    </div>
+                    <h3 class="h5 mb-2 text-dark">Update Availability</h3>
+                    <p class="text-muted mb-3">Set your working hours and available time slots</p>
+                    <a href="/Tailor/UpdateAvailability" class="btn btn-primary btn-sm">Set Availability</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Bookings -->
+@if (Model.RecentBookings != null && Model.RecentBookings.Any())
+{
+    <section class="section-padding bg-light">
+        <div class="container">
+            <div class="section-title text-center mb-5">
+                <h2 class="fw-bold text-dark">Recent Activity</h2>
+                <p class="text-muted">Your latest customer interactions</p>
+            </div>
+
+            <div class="row g-4">
+                @foreach (var booking in Model.RecentBookings)
+                {
+                    <div class="col-lg-6 reveal">
+                        <div class="feature-card">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="mb-2 text-dark">
+                                        <i class="bi bi-person text-primary me-2"></i>
+                                        @booking.Customer?.FullName
+                                    </h5>
+                                    <p class="text-muted small mb-1">
+                                        <i class="bi bi-scissors me-1"></i>@booking.Service?.ServiceName
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        @booking.BookingDate.ToString("MMM dd, yyyy")
+                                    </p>
+                                </div>
+                                <span class="badge @GetStatusBadgeClass(booking.Status)">
+                                    @booking.Status
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/Tailor/ViewBookings" class="btn btn-primary">View All Activity</a>
+            </div>
+        </div>
+    </section>
+}
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status?.ToLower() switch
+        {
+            "pending" => "bg-warning text-dark",
+            "confirmed" => "bg-success",
+            "completed" => "bg-primary",
+            "cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+@section Scripts {
+    <script>
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < window.innerHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+    </script>
+}

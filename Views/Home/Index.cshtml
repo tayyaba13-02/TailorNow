@@ -1,0 +1,312 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TailorNow - Premium On-Demand Tailoring Series</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-scissors text-primary"></i> TailorNow
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#why-us">Why Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-3">
+                    <a href="/Identity/Account/Login" class="btn btn-outline-primary">Login</a>
+                    <a href="/Identity/Account/Register" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section d-flex align-items-center">
+        <div class="container">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-6 hero-content reveal active">
+                    <!-- Adjusted badge for better visibility -->
+                    <span class="d-inline-block py-2 px-3 rounded-pill bg-white text-primary fw-bold shadow-sm mb-3">
+                        <i class="bi bi-stars"></i> #1 Online Tailoring Service
+                    </span>
+                    <h1 class="fw-bold">Experience the Art of <br>Perfect Stitching</h1>
+                    <p class="lead">
+                        From measurements to delivery, we bring the boutique to your doorstep. Professional tailors, premium fabrics, and perfect fits....guaranteed.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="/Identity/Account/Register" class="btn btn-primary btn-lg px-5">Get Started</a>
+                        <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#demoModal">
+                            <i class="bi bi-play-circle me-2"></i>Live Demo Guide
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image-wrapper reveal text-center">
+                        <img src="~/images/personimage.jpg" 
+                             alt="TailorNoww Heroo" class="img-fluid img-circle-custom shadow-lg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section-padding">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>How It Works</h2>
+                <p>Get your perfect outfit in 4 simple steps</p>
+            </div>
+            <div class="row g-4 text-center">
+                <div class="col-md-3 reveal">
+                    <div class="feature-card">
+                        <div class="feature-icon mx-auto">
+                            <i class="bi bi-cursor"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">1. Select Style</h4>
+                        <p class="text-muted">Choose from our gallery or upload your own design inspiration.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 reveal">
+                    <div class="feature-card">
+                        <div class="feature-icon mx-auto">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">2. Book Slot</h4>
+                        <p class="text-muted">Schedule a free pickup or a measuring consultation at home.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 reveal">
+                    <div class="feature-card">
+                        <div class="feature-icon mx-auto">
+                            <i class="bi bi-rulers"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">3. Stitching</h4>
+                        <p class="text-muted">Our expert tailors craft your outfit with precision and care.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 reveal">
+                    <div class="feature-card">
+                        <div class="feature-icon mx-auto">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">4. Delivery</h4>
+                        <p class="text-muted">Receive your freshly pressed, measurement-perfect outfit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="why-us" class="section-padding bg-purple-light">
+        <div class="container">
+            <div class="row align-items-center text-center text-lg-start">
+                <div class="col-lg-5 mb-5 mb-lg-0 reveal">
+                    <img src="~/images/machineimage.jpg" 
+                         alt="Why Choose Us" class="img-fluid img-circle-custom shadow-lg" />
+                </div>
+                <div class="col-lg-6 offset-lg-1 reveal">
+                    <div class="mb-4">
+                        <h6 class="text-primary fw-bold text-uppercase ls-wide">Why Choose Us</h6>
+                        <h2 class="fw-bold display-6">Quality You Can Trust, Speed You'll Love.</h2>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="me-4 text-primary fs-2">
+                            <i class="bi bi-award"></i>
+                        </div>
+                        <div>
+                            <h5>Expert Craftsmanship</h5>
+                            <p class="text-muted">We vet every tailor to ensure they meet our high-quality standards.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex mb-4">
+                        <div class="me-4 text-primary fs-2">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <div>
+                            <h5>Express Delivery</h5>
+                            <p class="text-muted">Need it fast? We offer express options for urgent occasions.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex mb-4">
+                        <div class="me-4 text-primary fs-2">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                        <div>
+                            <h5>Transparent Pricing</h5>
+                            <p class="text-muted">No hidden charges. See the rate card before you book.</p>
+                        </div>
+                    </div>
+
+                    <a href="/Identity/Account/Register" class="btn btn-primary mt-2">Get Started Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section-padding">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>Our Services</h2>
+                <p>Whatever you need stitched, we've got you covered.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 reveal">
+                    <div class="feature-card text-center text-md-start">
+                        <h4 class="mb-3">Custom Suits</h4>
+                        <p class="text-muted mb-4">Bespoke suits tailored to your exact measurements for weddings and corporate events.</p>
+                        <a href="#" class="text-primary text-decoration-none fw-bold">Explore <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 reveal">
+                    <div class="feature-card text-center text-md-start">
+                        <h4 class="mb-3">Ethnic Wear</h4>
+                        <p class="text-muted mb-4">Sherwanis, Kurtas, Lehengas, and more designed with intricate detailing.</p>
+                        <a href="#" class="text-primary text-decoration-none fw-bold">Explore <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 reveal">
+                    <div class="feature-card text-center text-md-start">
+                        <h4 class="mb-3">Alterations</h4>
+                        <p class="text-muted mb-4">Don't throw away ill-fitting clothes. We resize and restyle them for you.</p>
+                        <a href="#" class="text-primary text-decoration-none fw-bold">Explore <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Modal -->
+    <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-primary text-white border-0 py-3 rounded-top-4">
+                    <h5 class="modal-title fw-bold" id="demoModalLabel">
+                        <i class="bi bi-info-circle me-2"></i>Website Explorer Guide
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <!-- Video Demonstration -->
+                    <div class="video-container bg-dark rounded-bottom-4 overflow-hidden">
+                        <video class="w-100" controls autoplay muted loop style="max-height: 500px; object-fit: contain;">
+                            <source src="/videos/Demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pb-4">
+                    <a href="/Identity/Account/Login" class="btn btn-primary w-100 mx-4 py-2 rounded-3 text-uppercase fw-bold letter-spacing-1">
+                        Get Started <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <a href="#" class="text-white text-decoration-none h3 fw-bold mb-4 d-block">TailorNow</a>
+                    <p class="text-muted">
+                        TailorNow is your trusted partner for all tailoring needs. Combining tradition with technology to fit your lifestyle.
+                    </p>
+                </div>
+                <div class="col-lg-2 offset-lg-1">
+                    <h5 class="mb-3 fw-bold text-white">Company</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><a href="#home" class="text-decoration-none text-muted hover-white">Home</a></li>
+                        <li class="mb-2"><a href="#about" class="text-decoration-none text-muted hover-white">About Us</a></li>
+                        <li class="mb-2"><a href="#services" class="text-decoration-none text-muted hover-white">Services</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h5 class="mb-3 fw-bold text-white">Support</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted hover-white">Help Center</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted hover-white">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted hover-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5 class="mb-3 fw-bold text-white">Contact</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> Our Service Hubs</li>
+                        <li class="mb-2"><i class="bi bi-envelope me-2"></i> support@tailornow.com</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> +1 (555) 000-0000</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top border-secondary mt-5 pt-4 text-center text-muted">
+                <small>&copy; 2025 TailorNow. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Navbar scroll effect
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+
+        // Scroll reveal animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // Trigger once on load
+        reveal();
+    </script>
+</body>
+</html>

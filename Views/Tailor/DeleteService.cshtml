@@ -1,0 +1,78 @@
+﻿@model TailorrNow.Models.Service
+@{
+    ViewBag.Title = "Delete Service - TailorNow";
+    Layout = "~/Views/Shared/_LayoutTailor.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="bg-danger text-white rounded-3 p-4 mb-4 shadow">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Service</h2>
+                <p class="mb-0">This action cannot be undone. Please confirm deletion.</p>
+            </div>
+            <a href="/Tailor/ManageServices" class="btn btn-light">
+                <i class="bi bi-arrow-left me-1"></i> Back to Services
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-danger shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-scissors me-2"></i>Service to Delete</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger d-flex align-items-center">
+                        <i class="bi bi-exclamation-octagon-fill me-3" style="font-size: 1.5rem;"></i>
+                        <div>You are about to permanently delete this service.</div>
+                    </div>
+
+                    <div class="mb-4 p-3 bg-light rounded">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-medium">Service Name:</span>
+                            <span>@Model.ServiceName</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-medium">Price:</span>
+                            <span>₹@Model.Price</span>
+                        </div>
+                    </div>
+
+                    <form asp-action="DeleteService" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="confirmDelete" required>
+                            <label class="form-check-label text-danger fw-medium" for="confirmDelete">
+                                I understand this action cannot be undone
+                            </label>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/Tailor/ManageServices" class="btn btn-outline-purple px-4">
+                                <i class="bi bi-x-circle me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger px-4" id="deleteButton" disabled>
+                                <i class="bi bi-trash-fill me-1"></i> Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmCheckbox = document.getElementById('confirmDelete');
+            const deleteButton = document.getElementById('deleteButton');
+
+            confirmCheckbox.addEventListener('change', function() {
+                deleteButton.disabled = !this.checked;
+            });
+        });
+    </script>
+}

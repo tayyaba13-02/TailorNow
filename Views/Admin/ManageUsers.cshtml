@@ -1,0 +1,446 @@
+﻿@model IEnumerable<TailorrNow.Data.ApplicationUser>
+@{
+    ViewBag.Title = "Manage Users - TailorNow Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var userRoles = ViewBag.UserRoles as Dictionary<string, string>;
+}
+
+<div class="container-fluid px-0">
+    
+    <!-- Header Section -->
+    <div class="bg-primary text-white py-4 shadow-sm mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1"><i class="bi bi-people me-2"></i>Manage Users</h2>
+                <p class="mb-0 opacity-75">View and manage all registered Tailors and Customers</p>
+            </div>
+            <button class="btn btn-light rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                <i class="bi bi-person-plus me-1"></i> Add New User
+            </button>
+        </div>
+    </div>
+
+    <div class="container py-2">
+        <!-- Search and Filter Card -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 reveal active">
+            <div class="card-body p-4">
+                <form method="get" action="/Admin/ManageUsers">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-primary"></i></span>
+                                <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Search by name, email or phone..." />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-funnel text-primary"></i></span>
+                                <select name="role" class="form-select bg-light border-start-0 ps-0">
+                                    <option value="">All Roles</option>
+                                    <option value="Tailor">Tailors</option>
+                                    <option value="Customer">Customers</option>
+                                    <option value="Admin">Admins</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Users Table Card -->
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden reveal">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4 py-3 text-uppercase small fw-bold text-muted">User Info</th>
+                                <th class="py-3 text-uppercase small fw-bold text-muted">Role</th>
+                                <th class="py-3 text-uppercase small fw-bold text-muted">Status</th>
+                                
+                                <th class="text-end pe-4 py-3 text-uppercase small fw-bold text-muted">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-top-0">
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var user in Model)
+                                {
+                                    var role = userRoles != null && userRoles.ContainsKey(user.Id) ? userRoles[user.Id] : "No Role";
+                                    <tr>
+                                        <td class="ps-4 py-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-circle bg-primary-light text-primary me-3">
+                                                    @GetInitials(user.FullName ?? user.UserName ?? "U")
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">@(user.FullName ?? user.UserName)</h6>
+                                                    <small class="text-muted">@user.Email</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge @(role == "Tailor" ? "bg-info-light text-info" : (role == "Admin" ? "bg-primary-light text-primary" : "bg-warning-light text-warning")) border-0 px-3 py-2 rounded-pill small fw-bold">
+                                                @role
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success-light text-success border-0 px-3 py-2 rounded-pill small fw-bold">Active</span>
+                                        </td>
+
+                                        <td class="text-end pe-4">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-light border rounded-pill px-3 dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown">
+                                                    Action
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                                                                                                        <li><a class="dropdown-item py-2 edit-user-btn" href="#" data-id="@user.Id"><i class="bi bi-pencil me-2 text-primary"></i> Edit User</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                                                                        <li><a class="dropdown-item py-2 text-danger delete-user-btn" href="#" data-id="@user.Id"><i class="bi bi-trash me-2"></i> Delete User</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-5 text-muted">No users found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-primary text-white border-0 py-3">
+                <h5 class="modal-title fw-bold"><i class="bi bi-person-plus me-2"></i>Add New User</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addUserForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Full Name</label>
+                        <input type="text" class="form-control" id="addUserName" placeholder="Full name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control" id="addUserEmail" placeholder="Email address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="addUserPassword" placeholder="Minimum 6 characters" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row gx-3">
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-bold">Role</label>
+                            <select class="form-select" id="addUserRole" required>
+                                <option value="">Select Role</option>
+                                <option value="Customer">Customer</option>
+                                <option value="Tailor">Tailor</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-bold">Status</label>
+                            <select class="form-select" id="addUserStatus" required>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4" id="saveUserBtn">
+                    <span id="saveBtnSpinner" class="spinner-border spinner-border-sm d-none me-2"></span>
+                    Create User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-primary text-white border-0 py-3">
+                <h5 class="modal-title fw-bold"><i class="bi bi-pencil me-2"></i>Edit User</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Full Name</label>
+                        <input type="text" class="form-control" id="editUserName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control" id="editUserEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Role</label>
+                        <select class="form-select" id="editUserRole" required>
+                            <option value="Customer">Customer</option>
+                            <option value="Tailor">Tailor</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4" id="updateUserBtn">
+                    <span id="updateBtnSpinner" class="spinner-border spinner-border-sm d-none me-2"></span>
+                    Update User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow-lg rounded-4 text-center">
+            <div class="modal-body p-5">
+                <div class="text-danger mb-4">
+                    <i class="bi bi-exclamation-triangle-fill display-1"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Are you sure?</h4>
+                <p class="text-muted mb-4">You are about to delete this user permanently. This action cannot be undone.</p>
+                <input type="hidden" id="deleteUserId">
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-danger rounded-pill py-2" id="confirmDeleteBtn">
+                        <span id="deleteBtnSpinner" class="spinner-border spinner-border-sm d-none me-2"></span>
+                        Yes, Delete User
+                    </button>
+                    <button type="button" class="btn btn-light rounded-pill py-2" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetInitials(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return "U";
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 0) return "U";
+        if (parts.Length == 1) return parts[0][0].ToString().ToUpper();
+        return (parts[0][0].ToString() + parts[parts.Length - 1][0].ToString()).ToUpper();
+    }
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll reveal
+            function reveal() {
+                var reveals = document.querySelectorAll(".reveal");
+                for (var i = 0; i < reveals.length; i++) {
+                    var windowHeight = window.innerHeight;
+                    var elementTop = reveals[i].getBoundingClientRect().top;
+                    if (elementTop < windowHeight - 100) {
+                        reveals[i].classList.add("active");
+                    }
+                }
+            }
+            window.addEventListener("scroll", reveal);
+            reveal();
+
+            // Password Toggle
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('addUserPassword');
+            if(togglePassword) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.querySelector('i').classList.toggle('bi-eye');
+                    this.querySelector('i').classList.toggle('bi-eye-slash');
+                });
+            }
+
+            // Search and Filter Logic
+            const searchInput = document.getElementById('searchInput'); 
+            const roleFilter = document.getElementById('roleFilter'); 
+            
+            // Re-targeting for dynamic page
+            const tableRows = document.querySelectorAll('tbody tr');
+
+            // Handle Save User
+            const saveUserBtn = document.getElementById('saveUserBtn');
+            const saveBtnSpinner = document.getElementById('saveBtnSpinner');
+
+            saveUserBtn.addEventListener('click', function() {
+                const fullName = document.getElementById('addUserName').value;
+                const email = document.getElementById('addUserEmail').value;
+                const password = document.getElementById('addUserPassword').value;
+                const role = document.getElementById('addUserRole').value;
+                const status = document.getElementById('addUserStatus').value;
+
+                if (!email || !role || !password) {
+                    alert('Please fill in all required fields including password.');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters long.');
+                    return;
+                }
+
+                // Show loading
+                saveUserBtn.disabled = true;
+                saveBtnSpinner.classList.remove('d-none');
+
+                const formData = new FormData();
+                formData.append('fullName', fullName);
+                formData.append('email', email);
+                formData.append('password', password);
+                formData.append('role', role);
+                formData.append('status', status);
+
+                fetch('/Admin/RegisterUser', {
+                    method: 'POST',
+                    body: formData
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An unexpected error occurred.');
+                    saveUserBtn.disabled = false;
+                    saveBtnSpinner.classList.add('d-none');
+                });
+            });
+
+            // Handle Edit User Click
+            const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            document.querySelectorAll('.edit-user-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-id');
+                    
+                    fetch(`/Admin/GetUser?id=${userId}`)
+                        .then(response => response.json())
+                        .then(user => {
+                            document.getElementById('editUserId').value = user.id;
+                            document.getElementById('editUserName').value = user.fullName;
+                            document.getElementById('editUserEmail').value = user.email;
+                            document.getElementById('editUserRole').value = user.role;
+                            editUserModal.show();
+                        })
+                        .catch(err => {
+                            console.error('Error fetching user:', err);
+                            alert('Error loading user data.');
+                        });
+                });
+            });
+
+            // Handle Update User
+            const updateUserBtn = document.getElementById('updateUserBtn');
+            const updateBtnSpinner = document.getElementById('updateBtnSpinner');
+            updateUserBtn.addEventListener('click', function() {
+                const id = document.getElementById('editUserId').value;
+                const fullName = document.getElementById('editUserName').value;
+                const email = document.getElementById('editUserEmail').value;
+                const role = document.getElementById('editUserRole').value;
+
+                updateUserBtn.disabled = true;
+                updateBtnSpinner.classList.remove('d-none');
+
+                const formData = new FormData();
+                formData.append('id', id);
+                formData.append('fullName', fullName);
+                formData.append('email', email);
+                formData.append('role', role);
+
+                fetch('/Admin/UpdateUser', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                        updateUserBtn.disabled = false;
+                        updateBtnSpinner.classList.add('d-none');
+                    }
+                })
+                .catch(err => {
+                    console.error('Update error:', err);
+                    alert('An unexpected error occurred.');
+                    updateUserBtn.disabled = false;
+                    updateBtnSpinner.classList.add('d-none');
+                });
+            });
+
+            // Handle Delete User Click
+            const deleteUserModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+            document.querySelectorAll('.delete-user-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('deleteUserId').value = this.getAttribute('data-id');
+                    deleteUserModal.show();
+                });
+            });
+
+            // Handle Confirm Delete
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const deleteBtnSpinner = document.getElementById('deleteBtnSpinner');
+            confirmDeleteBtn.addEventListener('click', function() {
+                const id = document.getElementById('deleteUserId').value;
+
+                confirmDeleteBtn.disabled = true;
+                deleteBtnSpinner.classList.remove('d-none');
+
+                const formData = new FormData();
+                formData.append('id', id);
+
+                fetch('/Admin/DeleteUser', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                        confirmDeleteBtn.disabled = false;
+                        deleteBtnSpinner.classList.add('d-none');
+                    }
+                })
+                .catch(err => {
+                    console.error('Delete error:', err);
+                    alert('An unexpected error occurred.');
+                    confirmDeleteBtn.disabled = false;
+                    deleteBtnSpinner.classList.add('d-none');
+                });
+            });
+        });
+    </script>
+}

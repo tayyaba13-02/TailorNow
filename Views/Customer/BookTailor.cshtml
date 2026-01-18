@@ -1,0 +1,126 @@
+﻿@model TailorrNow.Models.ViewModels.BookTailorViewModel
+@{
+    ViewBag.Title = "Book Tailor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Page Header -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2 class="fw-bold">Find Your Perfect Tailor</h2>
+            <p class="text-muted">Choose from our verified tailors and book services directly</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-6">
+                <div class="input-group shadow-sm">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" id="searchInput" class="form-control bg-white border-start-0" 
+                           placeholder="Search tailors by name or location..." style="border-left: none;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tailors Grid -->
+        @if (Model.Tailors != null && Model.Tailors.Any())
+        {
+            <div class="row g-4" id="tailorsGrid">
+                @foreach (var tailor in Model.Tailors)
+                {
+                    <div class="col-md-6 col-lg-4 tailor-item reveal">
+                        <div class="feature-card h-100 text-center">
+                            <!-- Avatar -->
+                            <div class="avatar-circle bg-primary text-white mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                                @tailor.ShopName.Substring(0, 1)
+                            </div>
+
+                            <!-- Shop Name -->
+                            <h4 class="h5 mb-2">@tailor.ShopName</h4>
+                            
+                            <!-- Location -->
+                            <p class="text-muted small mb-3">
+                                <i class="bi bi-geo-alt me-1"></i>@tailor.City
+                            </p>
+
+                            <!-- Services -->
+                            @if (tailor.Services != null && tailor.Services.Any())
+                            {
+                                <div class="mb-3">
+                                    @foreach (var service in tailor.Services.Take(3))
+                                    {
+                                        <span class="badge bg-light text-primary border border-primary me-1 mb-1">
+                                            @service.ServiceName
+                                        </span>
+                                    }
+                                    @if (tailor.Services.Count() > 3)
+                                    {
+                                        <span class="badge bg-light text-secondary border border-secondary">
+                                            +@(tailor.Services.Count() - 3) more
+                                        </span>
+                                    }
+                                </div>
+
+                                <!-- Price Range -->
+                                <p class="text-primary fw-bold mb-3">
+                                    Starting from @tailor.Services.Min(s => s.Price).ToString("C")
+                                </p>
+                            }
+
+                            <!-- Book Button -->
+                            <a asp-action="BookForm" asp-route-tailorId="@tailor.Id" 
+                               class="btn btn-primary w-100">
+                                <i class="bi bi-calendar-plus me-2"></i>Book Now
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-search text-muted" style="font-size: 4rem;"></i>
+                <p class="text-muted mt-3">No tailors found. Please try a different search.</p>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const tailorItems = document.querySelectorAll('.tailor-item');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+
+            tailorItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < window.innerHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+    </script>
+}

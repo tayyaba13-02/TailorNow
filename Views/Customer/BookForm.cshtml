@@ -1,0 +1,120 @@
+﻿@model TailorrNow.Models.ViewModels.BookFormViewModel
+@{
+    ViewBag.Title = "Book Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <!-- Messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+            <!-- Form Card -->
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary mx-auto mb-3">
+                            <i class="bi bi-calendar-plus fs-3"></i>
+                        </div>
+                        <h3 class="fw-bold mb-1">Book Appointment</h3>
+                        <p class="text-muted small">Schedule your tailoring service</p>
+                    </div>
+
+                    <form asp-action="BookForm" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="TailorId" />
+
+                        <!-- Selected Tailor Display -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Selected Tailor</label>
+                            <div class="p-3 bg-light rounded-3 border d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-3" style="width: 45px; height: 45px;">
+                                    @(Model.SelectedTailor?.ShopName.Substring(0, 1) ?? "T")
+                                </div>
+                                <div>
+                                    <h5 class="mb-0 fw-bold">@(Model.SelectedTailor?.ShopName ?? "Tailor")</h5>
+                                    <p class="small text-muted mb-0">
+                                        <i class="bi bi-geo-alt me-1"></i>@(Model.SelectedTailor?.City ?? "Location")
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Selection -->
+                        <div class="mb-3">
+                            <label asp-for="ServiceId" class="form-label small fw-semibold text-secondary">Service <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-scissors text-muted"></i>
+                                </span>
+                                <select asp-for="ServiceId" class="form-select bg-light border-start-0" required>
+                                    <option value="">-- Select Service --</option>
+                                    @foreach (var service in Model.AvailableServices)
+                                    {
+                                        <option value="@service.Id">@service.ServiceName - @service.Price.ToString("C")</option>
+                                    }
+                                </select>
+                            </div>
+                            <span asp-validation-for="ServiceId" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Booking Date -->
+                        <div class="mb-3">
+                            <label asp-for="BookingDate" class="form-label small fw-semibold text-secondary">Booking Date <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-calendar3 text-muted"></i>
+                                </span>
+                                <input asp-for="BookingDate" type="date" class="form-control bg-light border-start-0" 
+                                       min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                            </div>
+                            <span asp-validation-for="BookingDate" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Special Instructions -->
+                        <div class="mb-4">
+                            <label asp-for="Notes" class="form-label small fw-semibold text-secondary">Special Instructions</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 align-items-start pt-2">
+                                    <i class="bi bi-chat-text text-muted"></i>
+                                </span>
+                                <textarea asp-for="Notes" class="form-control bg-light border-start-0" rows="3" 
+                                          placeholder="Any specific requirements or measurements..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-2">
+                                <i class="bi bi-check-circle me-2"></i>Confirm Booking
+                            </button>
+                            <a asp-action="BookTailor" class="btn btn-outline-primary py-2">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Tailors
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

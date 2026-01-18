@@ -1,0 +1,132 @@
+﻿@model TailorrNow.Models.ViewModels.MyBookingsViewModel
+@{
+    ViewBag.Title = "My Bookings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Page Header -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="section-title text-center mb-4">
+            <h2 class="fw-bold">My Bookings</h2>
+            <p class="text-muted">Track and manage all your tailoring appointments</p>
+        </div>
+
+        <!-- Status Filters -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+            <a asp-action="MyBookings" asp-route-status="all"
+               class="btn @(Model.StatusFilter == "all" ? "btn-primary" : "btn-outline-primary") btn-sm">
+                All Bookings
+            </a>
+            <a asp-action="MyBookings" asp-route-status="pending"
+               class="btn @(Model.StatusFilter == "pending" ? "btn-warning text-dark" : "btn-outline-warning") btn-sm">
+                Pending
+            </a>
+            <a asp-action="MyBookings" asp-route-status="confirmed"
+               class="btn @(Model.StatusFilter == "confirmed" ? "btn-success" : "btn-outline-success") btn-sm">
+                Confirmed
+            </a>
+            <a asp-action="MyBookings" asp-route-status="completed"
+               class="btn @(Model.StatusFilter == "completed" ? "btn-primary" : "btn-outline-primary") btn-sm">
+                Completed
+            </a>
+        </div>
+
+        <!-- Bookings List -->
+        @if (!Model.Bookings.Any())
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+                <p class="text-muted mt-3 mb-4">You don't have any bookings yet.</p>
+                <a asp-action="BookTailor" class="btn btn-primary">
+                    <i class="bi bi-calendar-plus me-2"></i>Book Your First Appointment
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var booking in Model.Bookings)
+                {
+                    <div class="col-lg-6 reveal">
+                        <div class="feature-card h-100">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-2">
+                                        <i class="bi bi-scissors text-primary me-2"></i>
+                                        @booking.Service?.ServiceName
+                                    </h5>
+                                    <p class="text-muted small mb-2">
+                                        <i class="bi bi-shop me-1"></i>@booking.Tailor?.ShopName
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        @booking.BookingDate.ToString("MMMM dd, yyyy")
+                                    </p>
+                                </div>
+                                <span class="badge @GetStatusBadgeClass(booking.Status)">
+                                    @booking.Status
+                                </span>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(booking.Notes))
+                            {
+                                <div class="alert alert-light border-0 mb-3">
+                                    <small class="text-muted">
+                                        <i class="bi bi-chat-text me-1"></i>
+                                        <strong>Notes:</strong> @booking.Notes
+                                    </small>
+                                </div>
+                            }
+
+                            @if (booking.Status.ToLower() == "completed")
+                            {
+                                <div class="d-flex gap-2 mt-3 pt-3 border-top">
+                                    <button class="btn btn-outline-primary btn-sm flex-grow-1">
+                                        <i class="bi bi-star me-1"></i>Rate Service
+                                    </button>
+                                    <a asp-action="BookForm" asp-route-tailorId="@booking.TailorId" 
+                                       class="btn btn-primary btn-sm flex-grow-1">
+                                        <i class="bi bi-arrow-repeat me-1"></i>Book Again
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status?.ToLower() switch
+        {
+            "pending" => "bg-warning text-dark",
+            "confirmed" => "bg-success",
+            "completed" => "bg-primary",
+            "cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+@section Scripts {
+    <script>
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < window.innerHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+    </script>
+}
