@@ -2,7 +2,7 @@
 
 **TailorNow** is a comprehensive ASP.NET Core web application designed to bridge the gap between professional tailors and customers. It offers a seamless, end-to-end platform for booking appointments, managing tailoring services, and tracking commissions, all wrapped in a premium, responsive user interface.
 
-![Live Demo](wwwroot/videos/Demo.mp4)
+
 
 ##  Key Features....
 
@@ -20,9 +20,6 @@
 - **User Management**: Full CRUD operations for Admins, Tailors, and Customers.
 - **Command Center**: Holistic dashboard with statistical charts and activity monitoring.
 - **Financial Reporting**: Detailed commission breakdown and earning reports for the platform.
-
-###  Live Demo Guide
-The application includes an interactive **Live Demo Guide** on the homepage, allowing public viewers to watch recorded walkthroughs and explore the system's capabilities without needing to sign up.
 
 ---
 
